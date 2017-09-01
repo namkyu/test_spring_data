@@ -18,7 +18,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 @NoArgsConstructor
 @AllArgsConstructor
 @lombok.ToString
-@Document(indexName = "nklee", type = "phone")
+@Document(indexName = "nklee", type = "phone", shards = 1, replicas = 0)
 public class Phone {
 
     @Id
