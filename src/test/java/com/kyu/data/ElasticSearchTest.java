@@ -1,6 +1,7 @@
 package com.kyu.data;
 
 import com.kyu.data.elasticsearch.model.Phone;
+import com.kyu.data.elasticsearch.repository.PhoneRepository;
 import com.kyu.data.elasticsearch.service.PhoneService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -30,6 +31,9 @@ public class ElasticSearchTest {
 
     @Autowired
     private PhoneService phoneService;
+
+    @Autowired
+    private PhoneRepository phoneRepository;
 
     @Before
     public void before() {
@@ -105,6 +109,21 @@ public class ElasticSearchTest {
 
         Phone testPhone = phoneService.findOne(1);
         assertNull(testPhone);
+    }
+
+    @Test
+    public void bulk_insert() {
+        List<Phone> phoneList = new ArrayList<>();
+        for (int i = 0; i < 10000000; i++) {
+            phoneList.add(new Phone(i, "010-1111-1111", "nklee" + i));
+
+            if (i % 1000000 == 0) {
+                phoneRepository.save(phoneList);
+                phoneList = new ArrayList<>();
+            }
+        }
+
+        phoneRepository.save(phoneList);
     }
 
 }

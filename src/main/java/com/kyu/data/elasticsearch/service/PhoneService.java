@@ -25,6 +25,10 @@ public class PhoneService {
         return phoneRepository.save(phone);
     }
 
+    public Iterable<Phone> save(Iterable<Phone> phones) {
+        return phoneRepository.save(phones);
+    }
+
     public void delete(Phone phone) {
         phoneRepository.delete(phone);
     }
