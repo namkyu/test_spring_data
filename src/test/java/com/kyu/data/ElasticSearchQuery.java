@@ -141,7 +141,6 @@ public class ElasticSearchQuery {
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(builder)
                 .addAggregation(AggregationBuilders.terms("authors").field("author").size(100))
-                .addAggregation(AggregationBuilders.count("my_cnt_fieldB").field("author"))
                 .build();
 
         Aggregations aggregations = esTemplate.query(searchQuery, (res) -> res.getAggregations());
