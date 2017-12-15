@@ -39,6 +39,7 @@ public class ElasticSearchQuery {
     @Autowired
     private ElasticsearchTemplate esTemplate;
 
+
     @Before
     public void before() {
         esTemplate.deleteIndex(Phone.class);
@@ -91,10 +92,7 @@ public class ElasticSearchQuery {
     public void 테스트_nested() throws InterruptedException {
         BoolQueryBuilder builder = boolQuery();
         builder.must(nestedQuery("friends", termQuery("friends.name", "원빈"))); // 리스트 안의 object 속성으로 조회
-
-        SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(builder)
-                .build();
+        SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(builder).build();
 
         Page<Phone> page = esTemplate.queryForPage(searchQuery, Phone.class);
         assertThat(page, Is.is(notNullValue()));
@@ -106,10 +104,7 @@ public class ElasticSearchQuery {
     public void 테스트_bool_query_must() throws InterruptedException {
         BoolQueryBuilder builder = boolQuery();
         builder.must(queryStringQuery("01033333333").field("number"));
-
-        SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(builder)
-                .build();
+        SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(builder).build();
 
         Page<Phone> phones = esTemplate.queryForPage(searchQuery, Phone.class);
         assertThat(1L, is(phones.getTotalElements()));
@@ -117,26 +112,19 @@ public class ElasticSearchQuery {
 
     @Test
     public void 테스트_날짜검색() {
-        BoolQueryBuilder builder = boolQuery()
-                .must(queryStringQuery("nklee").field("author"))
-                .filter(rangeQuery("dateUp").gte("now-1d").lt("now"));
-
-        SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(builder)
-                .build();
+        BoolQueryBuilder builder = boolQuery();
+        builder.must(termQuery("author", "nklee"));
+        builder.must(rangeQuery("dateUp").gte("now-80d").lt("now"));
+        SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(builder).build();
 
         Page<Phone> phones = esTemplate.queryForPage(searchQuery, Phone.class);
-        System.out.println("------------------------------");
-        for (Phone phone : phones) {
-            System.out.println(phone);
-        }
-        System.out.println("------------------------------");
+        phones.forEach(System.out::println);
     }
 
     @Test
     public void 테스트_Aggregation() {
-        BoolQueryBuilder builder = boolQuery()
-                .must(queryStringQuery("nklee").field("author"));
+        BoolQueryBuilder builder = boolQuery();
+        builder.must(queryStringQuery("nklee").field("author"));
 
         SearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(builder)

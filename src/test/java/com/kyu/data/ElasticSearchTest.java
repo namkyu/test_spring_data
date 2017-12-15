@@ -15,6 +15,7 @@ import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -45,9 +46,10 @@ public class ElasticSearchTest {
 
     @Test
     public void 데이터저장() {
-        Phone phone = new Phone(1, "010-1111-1111", "nklee");
+        Phone phone = new Phone(2, "010-1111-1111", "nklee", new Date());
         Phone testPhone = phoneService.save(phone);
 
+        System.out.println(testPhone);
         assertNotNull(testPhone.getId());
         assertThat(testPhone.getNumber(), is(phone.getNumber()));
     }

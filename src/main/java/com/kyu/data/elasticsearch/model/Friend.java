@@ -1,5 +1,6 @@
 package com.kyu.data.elasticsearch.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -18,6 +19,7 @@ import org.springframework.data.elasticsearch.core.query.IndexQuery;
 public class Friend {
 
     private String name;
+
     private int age;
 
 }

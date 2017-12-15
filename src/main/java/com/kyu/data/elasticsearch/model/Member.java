@@ -1,9 +1,6 @@
 package com.kyu.data.elasticsearch.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,42 +24,18 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @lombok.ToString
-@Document(indexName = "nklee", type = "phone", shards = 1, replicas = 0)
-public class Phone {
+@Document(indexName = "nklee_#{esName.getMonth()}", type = "member", shards = 2, replicas = 1)
+public class Member {
 
     @Id
     private int id;
 
     @Field(type = FieldType.String, index = FieldIndex.not_analyzed)
-    private String number;
-
-    @Field(type = FieldType.String, index = FieldIndex.not_analyzed)
-    private String author;
+    private String name;
 
     @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "yyyy.MM.dd hh:mm:ss", index = FieldIndex.not_analyzed)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd hh:mm:ss", timezone = "Asia/Seoul")
-    private Date dateUp;
-
-    @Field(type = FieldType.Nested)
-    private List<Friend> friends = new ArrayList<>();
-
-    public Phone(int id, String number, String author) {
-        this.id = id;
-        this.number = number;
-        this.author = author;
-    }
-
-    public Phone(int id, String number, String author, Date dateUp) {
-        this.id = id;
-        this.number = number;
-        this.author = author;
-        this.dateUp = dateUp;
-    }
-
-    public Phone addFriend(Friend friend) {
-        friends.add(friend);
-        return this;
-    }
+    private Date create;
 
     public IndexQuery buildIndex() {
         IndexQuery indexQuery = new IndexQuery();
